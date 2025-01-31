@@ -21,8 +21,14 @@ Route::get('/posts',[PostController::class,'index']);
 Route::get('/posts/{post}',[PostController::class,'show']);
 
 //Authentication
-Route::get('/register',[AuthController::class,'register'])->name('register');
-Route::post('/store-user',[AuthController::class,'storeUser'])->name('store.user');
-Route::get('/login',[AuthController::class,'login'])->name('login');
-Route::post('/login',[AuthController::class,'loginUser'])->name('login.user');
+Route::group(['middleware'=>'auth.mid'],function(){
+    Route::get('/register',[AuthController::class,'register'])->name('register');
+    Route::post('/register',[AuthController::class,'storeUser'])->name('store.user');
+    Route::get('/login',[AuthController::class,'login'])->name('login');
+    Route::post('/login',[AuthController::class,'loginUser'])->name('login.user');
+});
+// Route::get('/register',[AuthController::class,'register'])->name('register')->middleware('auth.mid');
+// Route::post('/register',[AuthController::class,'storeUser'])->name('store.user')->middleware('auth.mid');
+// Route::get('/login',[AuthController::class,'login'])->name('login')->middleware('auth.mid');
+// Route::post('/login',[AuthController::class,'loginUser'])->name('login.user')->middleware('auth.mid');
 Route::get('/logout',[AuthController::class,'logout'])->name('logout');

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 //use Illuminate\Auth\Events\Registered;
 use App\Models\User;
+use App\Mail\SendVerificationCode;
 use Auth;
+use Mail;
 class AuthController extends Controller
 {
        public function register()
@@ -23,6 +25,8 @@ class AuthController extends Controller
         ]);
        $data['password'] = bcrypt($data['password']);
        $user = User::create($data);
+       $user->code=505050;
+       Mail::to("hamada@gmail.com")->send(new SendVerificationCode($user));
       // event(new Registered($user));
         Auth::login($user);
         return redirect()->route('home');
